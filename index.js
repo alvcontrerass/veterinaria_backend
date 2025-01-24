@@ -1,13 +1,13 @@
 import express from "express";
 import { conectarDB } from "./config/db.js";
+import veterinarioRouter from "./routes/veterinarioRoutes.js";
 
 const app = express();
+app.use(express.json());
 
 conectarDB();
 
-app.use("/", (req, res) => {
-    res.send("hola mundo!!1!");
-})
+app.use("/api/veterinarios", veterinarioRouter)
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
