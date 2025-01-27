@@ -70,51 +70,50 @@ export const autenticar = async (req, res) => {
 };
 
 export const olvidePassword = async (req, res) => {
-    const { email } = req.body
-    const existeVeterinario = await Veterinario.findOne({email})
+	const { email } = req.body;
+	const existeVeterinario = await Veterinario.findOne({ email });
 
-    if(!existeVeterinario) {
-        const error = new Error("El usuario no existe")
-        return res.status(404).json({msg: error.message})
-    };
-    
-    try {
-        existeVeterinario.token = generarId()
-        await existeVeterinario.save()
-        res.json({msg: 'Hemos enviado un email con las instrucciones'})
-    } catch (error) {
-        res.status(400).json({msg: error.message})
-    }
+	if (!existeVeterinario) {
+		const error = new Error("El usuario no existe");
+		return res.status(404).json({ msg: error.message });
+	}
 
+	try {
+		existeVeterinario.token = generarId();
+		await existeVeterinario.save();
+		res.json({ msg: "Hemos enviado un email con las instrucciones" });
+	} catch (error) {
+		res.status(400).json({ msg: error.message });
+	}
 };
 
 export const comprobarToken = async (req, res) => {
-    const { token } = req.params
-    const tokenValido = await Veterinario.findOne({token})
-    if(tokenValido) {
-        res.json({msg: 'Token valido'})
-    }else {
-        const error = new Error("Token no valido")
-        return res.status(400).json({msg: error.message})
-    }
+	const { token } = req.params;
+	const tokenValido = await Veterinario.findOne({ token });
+	if (tokenValido) {
+		res.json({ msg: "Token valido" });
+	} else {
+		const error = new Error("Token no valido");
+		return res.status(400).json({ msg: error.message });
+	}
 };
 
 export const nuevoPassword = async (req, res) => {
-    const { token } = req.params
-    const { password} = req.body
-    
-    const veterinario = await Veterinario.findOne({token})
-    if(!veterinario) {
-        const error = new Error("token no valido o expirado")
-        return res.status(400).json({msg: error.message})
-    }
+	const { token } = req.params;
+	const { password } = req.body;
 
-    try {
-        veterinario.token = null
-        veterinario.password = password
-        await veterinario.save()
-        res.json({msg: 'Password modificado correctamente'})
-    } catch (error) {
-        console.log(error)
-    }
+	const veterinario = await Veterinario.findOne({ token });
+	if (!veterinario) {
+		const error = new Error("token no valido o expirado");
+		return res.status(400).json({ msg: error.message });
+	}
+
+	try {
+		veterinario.token = null;
+		veterinario.password = password;
+		await veterinario.save();
+		res.json({ msg: "Password modificado correctamente" });
+	} catch (error) {
+		console.log(error);
+	}
 };
