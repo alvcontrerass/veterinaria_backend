@@ -2,6 +2,7 @@ import { Veterinario } from "../models/Veterinario.js";
 import { generarJWT } from "../helpers/generarJWT.js";
 import { generarId } from "../helpers/generarId.js";
 import { emailRegistro } from "../helpers/emailRegistro.js";
+//*Cambiar los argumentos en la funcion emailRegistro(Linea 19) en produccion*
 
 export const registrar = async (req, res) => {
 	const { email } = req.body;
