@@ -32,7 +32,7 @@ export const confirmar = async (req, res) => {
 	const usuarioConfirmar = await Veterinario.findOne({ token });
 	if (!usuarioConfirmar) {
 		const error = new Error("Token no valido");
-		return res.status(404).json({ msg: error.message });
+		return res.status(401).json({ msg: error.message });
 	}
 	try {
 		usuarioConfirmar.token = null;
@@ -97,7 +97,7 @@ export const comprobarToken = async (req, res) => {
 		res.json({ msg: "Token valido" });
 	} else {
 		const error = new Error("Token no valido");
-		return res.status(400).json({ msg: error.message });
+		return res.status(401).json({ msg: error.message });
 	}
 };
 
@@ -108,7 +108,7 @@ export const nuevoPassword = async (req, res) => {
 	const veterinario = await Veterinario.findOne({ token });
 	if (!veterinario) {
 		const error = new Error("token no valido o expirado");
-		return res.status(400).json({ msg: error.message });
+		return res.status(401).json({ msg: error.message });
 	}
 
 	try {
