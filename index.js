@@ -9,7 +9,7 @@ app.use(express.json());
 
 conectarDB();
 
-const dominiosPermitidos = ["http://localhost:5173", "http://localhost:4000", "https://localhost:4000"]
+const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.BACKEND_URL]
 
 const corsOptions = {
 	origin: (origin, callback) => {
