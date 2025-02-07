@@ -8,7 +8,7 @@ export const emailRegistro = async (nombre, token) => { //*agregar correo en amb
         to: ["alvarocontrerasilva@gmail.com"],
         subject: "Confirma tu cuenta",
         html: `Hola! ${nombre}. Por favor verifica tu cuenta en el sigueinte link \n
-        <a href="http://localhost:5173/confirmar/${token}">Verificar Cuenta</a>`,
+        <a href=${process.env.FRONTEND_URL}/confirmar/${token}>Verificar Cuenta</a>`,
     });
 
     if (error) {

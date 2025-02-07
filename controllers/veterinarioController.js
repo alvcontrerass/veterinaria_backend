@@ -2,7 +2,8 @@ import { Veterinario } from "../models/Veterinario.js";
 import { generarJWT } from "../helpers/generarJWT.js";
 import { generarId } from "../helpers/generarId.js";
 import { emailRegistro } from "../helpers/emailRegistro.js";
-//*Cambiar los argumentos en la funcion emailRegistro(Linea 19) en produccion*
+import { emailOlvidePassword } from "../helpers/emailOlvidePassword.js";
+//*Cambiar los argumentos en la funcion emailRegistro(Linea 19 y 90) en produccion*
 
 export const registrar = async (req, res) => {
 	const { email } = req.body;
@@ -78,13 +79,15 @@ export const olvidePassword = async (req, res) => {
 	const existeVeterinario = await Veterinario.findOne({ email });
 
 	if (!existeVeterinario) {
-		const error = new Error("El usuario no existe");
+		const error = new Error("El correo no existe");
 		return res.status(404).json({ msg: error.message });
 	}
 
 	try {
 		existeVeterinario.token = generarId();
 		await existeVeterinario.save();
+		const { email, nombre, token } = existeVeterinario
+		emailOlvidePassword(nombre, token) //agregar correo en ambiente de produccion
 		res.json({ msg: "Hemos enviado un email con las instrucciones" });
 	} catch (error) {
 		res.status(400).json({ msg: error.message });
@@ -104,7 +107,7 @@ export const comprobarToken = async (req, res) => {
 
 export const nuevoPassword = async (req, res) => {
 	const { token } = req.params;
-	const { password } = req.body;
+	const { nombre, password, email } = req.body;
 
 	const veterinario = await Veterinario.findOne({ token });
 	if (!veterinario) {
