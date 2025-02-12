@@ -68,7 +68,12 @@ export const autenticar = async (req, res) => {
 			const error = new Error("El password es incorrecto");
 			return res.status(403).json({ msg: error.message });
 		}
-		res.json({ token: generarJWT(usuario.id) });
+		res.json({
+			_id: usuario.id,
+			nombre: usuario.nombre,
+			email: usuario.email,
+			token: generarJWT(usuario.id),
+		});
 	} catch (error) {
 		console.log(error);
 	}
