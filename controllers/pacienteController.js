@@ -5,9 +5,7 @@ export const agregarPaciente = async (req, res) => {
 	paciente.veterinario = req.veterinario._id;
 	try {
 		const pacienteGuardado = await paciente.save();
-		res.json({
-			msg: `el paciente ${pacienteGuardado.nombre} de ${pacienteGuardado.propietario} ha sido ingresado`,
-		});
+		res.json(pacienteGuardado)
 	} catch (error) {
 		console.log(error);
 	}
