@@ -29,6 +29,34 @@ export const perfil = (req, res) => {
 	res.json({ perfil: veterinario });
 };
 
+export const actualizarPerfil = async (req, res) => {
+	const veterinario = await Veterinario.findById(req.params.id);
+	const { email, nombre, web, telfono } = req.body;
+	if(!veterinario) {
+		const error = new Error("El veterinario no fue encontrado o hubo otro error desconocido");
+		return res.status(403).json({msg:error.message})
+	}
+
+	if(veterinario.email !== req.body.email) {
+		const existeEmail = await Veterinario.findOne({email})
+		if(existeEmail) {
+			const error = new Error("El correo ya esta registrado");
+			return res.status(401).json({msg:error.message})
+		}
+	}
+	try {
+		veterinario.nombre = nombre;
+		veterinario.email = email;
+		veterinario.web = web;
+		veterinario.telfono = telfono;
+
+		const veterinarioActualizado = await veterinario.save();
+		res.json(veterinarioActualizado);
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 export const confirmar = async (req, res) => {
 	const { token } = req.params;
 	const usuarioConfirmar = await Veterinario.findOne({ token });
@@ -129,3 +157,22 @@ export const nuevoPassword = async (req, res) => {
 		console.log(error);
 	}
 };
+
+export const actualizarPassword = async (req, res) => {
+	const { _id } = req.veterinario
+	const { passwordActual, passwordNuevo } =req.body
+	const veterinario = await Veterinario.findOne({ _id });
+	if (!veterinario) {
+		const error = new Error("Veterinario no encontrado");
+		return res.status(401).json({ msg: error.message });
+	}
+
+	if(await veterinario.comprobarPassword(passwordActual)) {
+		veterinario.password = passwordNuevo;
+		await veterinario.save();
+		res.json({msg: "Password actualizado correctamente"})
+	} else {
+		const error = new Error("Password actual es incorrecto");
+		return res.status(401).json({ msg: error.message });
+	}
+}
