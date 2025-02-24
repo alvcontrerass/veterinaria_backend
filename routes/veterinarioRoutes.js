@@ -8,7 +8,7 @@ import {
 	comprobarToken,
 	nuevoPassword,
 	actualizarPerfil,
-	actualizarPassword
+	actualizarPassword,
 } from "../controllers/veterinarioController.js";
 const router = express.Router();
 import { checkAuth } from "../middleware/authMiddleware.js";

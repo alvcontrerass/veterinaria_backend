@@ -5,7 +5,7 @@ export const agregarPaciente = async (req, res) => {
 	paciente.veterinario = req.veterinario._id;
 	try {
 		const pacienteGuardado = await paciente.save();
-		res.json(pacienteGuardado)
+		res.json(pacienteGuardado);
 	} catch (error) {
 		console.log(error);
 	}
@@ -15,7 +15,6 @@ export const obtenerPaciente = async (req, res) => {
 	const pacientes = await Paciente.find()
 		.where("veterinario")
 		.equals(req.veterinario);
-	console.log(req.veterinario);
 	res.json(pacientes);
 };
 

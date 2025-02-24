@@ -2,24 +2,24 @@ import express from "express";
 import { conectarDB } from "./config/db.js";
 import veterinarioRouter from "./routes/veterinarioRoutes.js";
 import pacienteRouter from "./routes/pacienteRoutes.js";
-import cors from "cors"
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
 
 conectarDB();
 
-const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.BACKEND_URL]
+const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.BACKEND_URL];
 
 const corsOptions = {
 	origin: (origin, callback) => {
 		if (dominiosPermitidos.indexOf(origin) !== -1) {
-			callback(null, true)
+			callback(null, true);
 		} else {
-			callback(new Error("No permitido por CORS"))
+			callback(new Error("No permitido por CORS"));
 		}
-	}
-}
+	},
+};
 
 app.use(cors(corsOptions));
 
